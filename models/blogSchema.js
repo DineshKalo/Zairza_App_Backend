@@ -1,20 +1,7 @@
 const mongoose = require("mongoose")
 
-const eventSchema = new mongoose.Schema({
+const blogSchema = new mongoose.Schema({
     title: {
-        type: String,
-        required: true
-    },
-    date_and_time: {
-        type: Date,
-        required: true
-    },
-    wing: {
-        type: String,
-        enum: ['Hardware', 'Software', 'Design'],
-        required: true
-    },
-    event_img: {
         type: String,
         required: true
     },
@@ -22,11 +9,21 @@ const eventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    senior_incharge: {
+    wing: {
+        type: String,
+        enum: ['Hardware', 'Software', 'Design'],
+        required: true
+    },
+    image: {
         type: String,
         required: true
     },
+    links: { 
+        url: {
+            type: String
+        }
+    },
 });
 
-module.exports = mongoose.model("Events", eventSchema);
+module.exports = mongoose.model("Blogs", blogSchema);
 

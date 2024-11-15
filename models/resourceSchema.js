@@ -1,20 +1,52 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const resourceSchema = new mongoose.Schema({
-    roadmaps: {
-        googleDriveLinks: [String],
+  roadmaps: [{
+    name: { 
+        type: String, 
+        required: true 
     },
-    videos: {
-        youtubeLinks: [String],
+    links: {
+        type: String
     },
-    session_presentations: {
+  }],
+  videos: [{
+    name: { 
+        type: String, 
+        required: true 
+    },
+    description: {
+        type: String
+    },
+    url: {
         type: String,
-    },
-    domain: {
-        type: String,
-        enum: ['Web Development', 'App Development', 'Design', 'Machine Learning'],
-        required: true
+        required: true,
     }
+  }],
+  session_presentations: [{
+    name: {
+        type: String,
+        required: true,
+    }, 
+    url: {
+        type: String,
+        required: true,
+    }
+  }],
+  inventory: [{
+    name_of_project: {
+        type: String,
+        required: true,
+    },
+    component: [{
+        type: String,
+        required: true
+    }],
+    date_of_return: {
+        type: Date,
+        required: true,
+    }
+  }]
 });
 
-module.exports = mongoose.model("resources", resourceSchema);
+module.exports = mongoose.model("Resources", resourceSchema);

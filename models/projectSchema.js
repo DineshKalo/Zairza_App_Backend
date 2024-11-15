@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const eventSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -14,7 +14,12 @@ const eventSchema = new mongoose.Schema({
         enum: ['Hardware', 'Software', 'Design'],
         required: true
     },
-    event_img: {
+    status: {
+        type: String,
+        enum: ['Ongoing', 'Completed'],
+        required: true
+    },
+    project_img: {
         type: String,
         required: true
     },
@@ -26,7 +31,15 @@ const eventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    links: [{ 
+        name: {
+            type: String
+        },
+        url: {
+            type: String
+        }
+    }],
 });
 
-module.exports = mongoose.model("Events", eventSchema);
+module.exports = mongoose.model("Projects", projectSchema);
 

@@ -7,7 +7,7 @@ const User = require('../models/userSchema');
 
 // Registering a new user
 router.post('/register', async (req, res) => {
-    const { name, registration_number, branch, phone_number, email, password, batch } = req.body;
+    const { first_name, last_name, registration_number, branch, phone_number, email, password, batch } = req.body;
     try {
 
         if (!password || password.trim().length === 0) {
@@ -24,7 +24,8 @@ router.post('/register', async (req, res) => {
 
         // Create a new user
         let newUser = new User({
-            name,
+            first_name,
+            last_name,
             registration_number,
             branch,
             phone_number,
@@ -47,23 +48,27 @@ router.post('/register', async (req, res) => {
 });
 
 
-// Login
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { input, password } = req.body;
     try {
-        // Check if user with the given email exists
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.json({ message: 'Invalid credentials' });
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let user;
+
+        if (emailRegex.test(input)) {
+            user = await User.findOne({ email: input });
+        } else {
+            user = await User.findOne({ zairza_id: input });
         }
 
-        // Check if the password is correct
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        // Create and sign a token
         const payload = {
             user: {
                 id: user.id

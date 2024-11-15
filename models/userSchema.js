@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name: {
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
         type: String,
         required: true
     },
@@ -19,16 +23,13 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        // unique: true,
-        // lowercase: true,
-        // match: [/\S+@\S+\.\S+/, 'is invalid'],
     },
     password: {
         type: String,
         // required: true,
         minlength: 6
     },
-    skills: [{
+    skills: [{ //domains
         type: String
     }],
     projects: [{
@@ -45,8 +46,17 @@ const userSchema = new mongoose.Schema({
             type: String
         }
     }], 
+    interships: [{
+        role: {
+            type: String
+        },
+        company: {
+            type: String
+        }
+    }], 
     zairza_id: {
-        type: String
+        type: String,
+        unique: true
     },
     batch: {
         type: String
@@ -62,11 +72,16 @@ const userSchema = new mongoose.Schema({
             type: String
         }
     }],
-    social_handles: [{
+    social_handles: [{ //links
         name: {
             type: String
         },
         link: {
+            type: String
+        }
+    }],
+    achievements: [{ 
+        name: {
             type: String
         }
     }],

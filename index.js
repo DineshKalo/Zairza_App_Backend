@@ -9,7 +9,6 @@ const fileUpload = require("./routes/fileUpload")
 const resources = require("./routes/resources")
 
 const app = express();
-require("./mongoDB/mongo_conn");
 
 // app.use(bodyparser.urlencoded({extended: true}));
 app.use(express.json());
@@ -19,6 +18,10 @@ app.use("/zairza",auth);
 app.use("/zairza",profiles);
 app.use("/zairza",fileUpload);
 app.use("/zairza",resources);
+
+//Connecting Database
+const dataBase = require("./mongoDB/mongo_conn");
+dataBase.connect();
 
 app.listen(PORT, (req,res)=>{
     console.log("Server Running on: "+PORT);
