@@ -1,70 +1,85 @@
 const express = require("express");
 const router = express.Router();
-const eventSchema = require("../models/eventSchema");
+const Event = require("../models/eventSchema");
 
 // ******************** POST request for uploading data ******************
+router.post("/uploadEvent", async (req, res) => {
+    try {
+        const { title, date_and_time, wing, event_img, description, senior_incharge } = req.body;
 
-try{
-    router.post("/uploadEvent", async(req,res)=>{
-        const newEvent = new eventSchema({
-            title: req.body.title,
-            date_and_time: req.body.date_and_time,
-            wing: req.body.wing,
-            event_img: req.body.event_img,
-            description: req.body.description,
-            senior_incharge: req.body.senior_incharge,
-        });    
+        if (!title || !date_and_time || !wing || !event_img || !description || !senior_incharge) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const newEvent = new Event({
+            title,
+            date_and_time,
+            wing,
+            event_img,
+            description,
+            senior_incharge,
+        });
 
         const savedEvent = await newEvent.save();
+        res.status(201).json(savedEvent);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
 
-        console.log(savedEvent);
-        
-        res.json(savedEvent);
-    });
-}catch(error){
-    res.send(`${error}`);
-}
+// ************************** GET request for retrieving data ************************
+router.get("/retrieveEvent", async (req, res) => {
+    try {
+        const data = await Event.find();
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
 
-// ************************** Retrieving data ************************
+// ****************************** PUT request for updating data *********************
+router.put("/updateEvent/:id", async (req, res) => {
+    try {
+        const { title, date_and_time, event_img, description, senior_incharge, wing } = req.body;
 
-try{
-    router.get("/retrieveEvent", async(req,res)=>{
-        const data = await eventSchema.find();
-        res.json(data);
-    });
-}catch(error){
-    res.send(`${error}`);
-}
-
-// ****************************** Updating data *********************
-
-try {
-    router.put('/updateEvent/:id', async (req, res) => {
-        // Remove the unnecessary new eventSchema instance
-        // You should create the newEvent object directly
-        const newEvent = {
-            title: req.body.title,
-            date_and_time: req.body.date_and_time,
-            event_img: req.body.event_img,
-            description: req.body.description,
-            senior_incharge: req.body.senior_incharge,
+        const updatedEvent = {
+            title,
+            date_and_time,
+            event_img,
+            description,
+            senior_incharge,
+            wing,
         };
 
-        // Assuming 'JWT_TOKEN' should be replaced with the actual ID you want to update
-        const idToUpdate = req.params.id; // Replace with the actual ID
-
-        // Use findByIdAndUpdate with the correct parameters
-        const data = await eventSchema.findByIdAndUpdate(idToUpdate, newEvent, { new: true });
+        const data = await Event.findByIdAndUpdate(req.params.id, updatedEvent, { new: true });
 
         if (!data) {
-            // Handle the case where the event with the provided ID is not found
-            res.status(404).json({ message: 'Event not found' });
-        } else {
-            res.status(200).json(data);
+            return res.status(404).json({ message: "Event not found" });
         }
-    });
-} catch (error) {
-    console.log(error);
-}
+
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+// **************************** DELETE request for deleting data ****************************
+router.delete("/deleteEvent/:id", async (req, res) => {
+    try {
+        const data = await Event.findByIdAndDelete(req.params.id);
+
+        if (!data) {
+            return res.status(404).json({ message: "Event not found" });
+        }
+
+        res.status(200).json({ message: "Event deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
 
 module.exports = router;

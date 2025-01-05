@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
             type: String
         }
     }], 
-    interships: [{
+    internships: [{
         role: {
             type: String
         },

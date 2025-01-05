@@ -6,7 +6,12 @@ const event = require("./routes/router_event")
 const auth = require("./routes/authentication")
 const profiles = require("./routes/profiles")
 const fileUpload = require("./routes/fileUpload")
-const resources = require("./routes/resources")
+const inventory = require("./routes/inventoryRouter")
+const roadmap = require("./routes/roadmapRouter")
+const sessionPresentation = require("./routes/sessionPresentationRouter")
+const video = require("./routes/videoRouter")
+const projects= require("./routes/route_project")
+const blogs= require("./routes/blog_routes")
 
 const app = express();
 
@@ -17,7 +22,12 @@ app.use("/zairza",event);
 app.use("/zairza",auth);
 app.use("/zairza",profiles);
 app.use("/zairza",fileUpload);
-app.use("/zairza",resources);
+app.use("/zairza",inventory);
+app.use("/zairza",roadmap);
+app.use("/zairza",sessionPresentation);
+app.use("/zairza",video);
+app.use("/zairza",projects);
+app.use("/zairza",blogs);
 
 //Connecting Database
 const dataBase = require("./mongoDB/mongo_conn");
