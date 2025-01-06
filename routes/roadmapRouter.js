@@ -25,6 +25,20 @@ router.get("/getRoadmap", async (req, res) => {
   }
 });
 
+// GET: Retrieve a specific roadmap by ID
+router.get("/getRoadmap/:id", async (req, res) => {
+  try {
+    const roadmap = await Roadmap.findById(req.params.id);
+    if (!roadmap) {
+      return res.status(404).json({ message: "Roadmap not found" });
+    }
+    res.status(200).json(roadmap);
+  } catch (error) {
+    console.error("Error retrieving roadmap:", error);
+    res.status(500).json({ message: "Internal server error", error: error.toString() });
+  }
+});
+
 // PUT: Update a roadmap by ID
 router.put("/updateRoadmap/:id", async (req, res) => {
   try {

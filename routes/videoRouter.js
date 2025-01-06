@@ -25,6 +25,22 @@ router.get("/getVideos", async (req, res) => {
   }
 });
 
+// GET: Retrieve a video by ID
+router.get("/getVideo/:id", async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.id);
+
+    if (!video) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    res.status(200).json(video);
+  } catch (error) {
+    console.error("Error retrieving video:", error);
+    res.status(500).json({ message: "Internal server error", error: error.toString() });
+  }
+});
+
 // PUT: Update a video by ID
 router.put("/updateVideo/:id", async (req, res) => {
   try {

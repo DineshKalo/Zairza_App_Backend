@@ -25,6 +25,22 @@ router.get("/getSession", async (req, res) => {
   }
 });
 
+// GET: Retrieve a session presentation by ID
+router.get("/getSession/:id", async (req, res) => {
+  try {
+    const sessionPresentation = await SessionPresentation.findById(req.params.id);
+
+    if (!sessionPresentation) {
+      return res.status(404).json({ message: "Session presentation not found" });
+    }
+
+    res.status(200).json(sessionPresentation);
+  } catch (error) {
+    console.error("Error retrieving session presentation:", error);
+    res.status(500).json({ message: "Internal server error", error: error.toString() });
+  }
+});
+
 // PUT: Update a session presentation by ID
 router.put("/updateSession/:id", async (req, res) => {
   try {
